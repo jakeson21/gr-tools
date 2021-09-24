@@ -21,4 +21,11 @@ except ModuleNotFoundError:
 
 # import any pure python here
 from .print_float import print_float
+from .print_bytes import print_bytes
+from .upsample_bb import upsample_bb
+from .upsample_ss import upsample_ss
+from .upsample_cc import upsample_cc
+from .upsample_ff import upsample_ff
+from .apsk_modulator_bf import apsk_modulator_bf
+from .apsk_modulator_bc import apsk_modulator_bc
 #

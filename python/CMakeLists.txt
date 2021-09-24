@@ -22,7 +22,14 @@ add_subdirectory(bindings)
 GR_PYTHON_INSTALL(
     FILES
     __init__.py
-    print_float.py DESTINATION ${GR_PYTHON_DIR}/tools
+    print_float.py
+    print_bytes.py
+    upsample_cc.py
+    upsample_ff.py
+    upsample_ss.py
+    upsample_bb.py
+    apsk_modulator_bc.py 
+    apsk_modulator_bf.py DESTINATION ${GR_PYTHON_DIR}/tools
 )
 
 ########################################################################
@@ -31,3 +38,4 @@ GR_PYTHON_INSTALL(
 include(GrTest)
 
 set(GR_TEST_TARGET_DEPS gnuradio-tools)
+GR_ADD_TEST(qa_fm_modulator_fc ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_fm_modulator_fc.py)

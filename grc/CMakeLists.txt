@@ -7,5 +7,9 @@
 #
 
 install(FILES
-    tools_print_float.block.yml DESTINATION share/gnuradio/grc/blocks
+    tools_print_float.block.yml
+    tools_print_bytes.block.yml
+    tools_upsample_xx.block.yml
+    tools_apsk_modulator_xx.block.yml
+    tools_fm_modulator_fc.block.yml DESTINATION share/gnuradio/grc/blocks
 )

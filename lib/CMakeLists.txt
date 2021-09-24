@@ -12,6 +12,7 @@
 include(GrPlatform) #define LIB_SUFFIX
 
 list(APPEND tools_sources
+    fm_modulator_fc_impl.cc
 )
 
 set(tools_sources "${tools_sources}" PARENT_SCOPE)
