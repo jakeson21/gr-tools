@@ -11,5 +11,6 @@
 ########################################################################
 install(FILES
     api.h
-    fm_modulator_fc.h DESTINATION include/tools
+    fm_modulator_fc.h
+    audio_file_source.h DESTINATION include/tools
 )

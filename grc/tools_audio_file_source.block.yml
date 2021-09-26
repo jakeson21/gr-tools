@@ -1,35 +1,34 @@
-id: tools_fm_modulator_fc
-label: FM Modulator
+id: tools_audio_file_source
+label: Audio File Source
 category: '[Tools]'
 flags: [ python, cpp ]
 
 templates:
   imports: import tools
-  make: tools.fm_modulator_fc(${samp_rate}, ${freq_deviation}, ${initial_phase})
-  callbacks:
-    - set_freq_deviation(${freq_deviation})
+  make: tools.audio_file_source(${file_name}, ${samp_rate_out}, ${channels}, ${repeat})
+
 #  Make one 'parameters' list entry for every parameter you want settable from the GUI.
 #     Keys include:
 #     * id (makes the value accessible as keyname, e.g. in the make entry)
 #     * label (label shown in the GUI)
 #     * dtype (e.g. int, float, complex, byte, short, xxx_vector, ...)
 parameters:
-- id: samp_rate
-  label: Sample Rate
+- id: file_name
+  label: File Name
+  dtype: string
+- id: samp_rate_out
+  label: Output Sample Rate
   dtype: float
-  default: 'samp_rate'
-- id: freq_deviation
-  label: Frequency Deviation
-  dtype: float
-  default: 'samp_rate/2'
-- id: initial_phase
-  label: Initial Phase
-  dtype: float
-  default: '0'
-#  value: You need to fill in your grc/tools_fm_modulator_fc.block.yaml
-#- id: ...
-#  label: ...
-#  dtype: ...
+  default: '44100'
+- id: channels
+  label: Output Channels
+  dtype: int
+  default: '1'
+  hide: part
+- id: repeat
+  label: Repeat
+  dtype: bool
+  default: True
 
 #  Make one 'inputs' list entry per input and one 'outputs' list entry per output.
 #  Keys include:
@@ -38,17 +37,18 @@ parameters:
 #      * dtype (e.g. int, float, complex, byte, short, xxx_vector, ...)
 #      * vlen (optional - data stream vector length. Default is 1)
 #      * optional (optional - set to 1 for optional inputs. Default is 0)
-inputs:
-- label: in
-  domain: stream
-  dtype: float
+#inputs:
+#- label: ...
+#  domain: ...
+#  dtype: ...
 #  vlen: ...
 #  optional: ...
 
 outputs:
 - label: out
   domain: stream
-  dtype: complex
+  dtype: float
+  multiplicity: ${ channels }
 #  vlen: ...
 #  optional: ...
 

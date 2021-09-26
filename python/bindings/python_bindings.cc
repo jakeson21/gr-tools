@@ -22,6 +22,7 @@ namespace py = pybind11;
 /**************************************/
 // BINDING_FUNCTION_PROTOTYPES(
     void bind_fm_modulator_fc(py::module& m);
+    void bind_audio_file_source(py::module& m);
 // ) END BINDING_FUNCTION_PROTOTYPES
 
 
@@ -51,5 +52,6 @@ PYBIND11_MODULE(tools_python, m)
     /**************************************/
     // BINDING_FUNCTION_CALLS(
     bind_fm_modulator_fc(m);
+    bind_audio_file_source(m);
     // ) END BINDING_FUNCTION_CALLS
 }

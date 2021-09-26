@@ -39,3 +39,4 @@ include(GrTest)
 
 set(GR_TEST_TARGET_DEPS gnuradio-tools)
 GR_ADD_TEST(qa_fm_modulator_fc ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_fm_modulator_fc.py)
+GR_ADD_TEST(qa_audio_file_source ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_audio_file_source.py)

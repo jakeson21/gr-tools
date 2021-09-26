@@ -29,7 +29,8 @@ include(GrPybind)
 ########################################################################
 
 list(APPEND tools_python_files
-    fm_modulator_fc_python.cc python_bindings.cc)
+    fm_modulator_fc_python.cc
+    audio_file_source_python.cc python_bindings.cc)
 
 GR_PYBIND_MAKE_OOT(tools 
    ../..

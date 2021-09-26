@@ -13,8 +13,8 @@
 /* If manual edits are made, the following tags should be modified accordingly.    */
 /* BINDTOOL_GEN_AUTOMATIC(0)                                                       */
 /* BINDTOOL_USE_PYGCCXML(0)                                                        */
-/* BINDTOOL_HEADER_FILE(fm_modulator_fc.h)                                        */
-/* BINDTOOL_HEADER_FILE_HASH(75cf354fee957a7201ea84196e9be414)                     */
+/* BINDTOOL_HEADER_FILE(audio_file_source.h)                                        */
+/* BINDTOOL_HEADER_FILE_HASH(56a34d44296ee3be432e836c39f58bfa)                     */
 /***********************************************************************************/
 
 #include <pybind11/complex.h>
@@ -23,29 +23,31 @@
 
 namespace py = pybind11;
 
-#include <tools/fm_modulator_fc.h>
+#include <tools/audio_file_source.h>
 // pydoc.h is automatically generated in the build directory
-#include <fm_modulator_fc_pydoc.h>
+#include <audio_file_source_pydoc.h>
 
-void bind_fm_modulator_fc(py::module& m)
+void bind_audio_file_source(py::module& m)
 {
 
-    using fm_modulator_fc    = gr::tools::fm_modulator_fc;
+    using audio_file_source    = gr::tools::audio_file_source;
 
 
-    py::class_<fm_modulator_fc, gr::sync_block,
+    py::class_<audio_file_source, gr::sync_block,
               gr::block, gr::basic_block,
-        std::shared_ptr<fm_modulator_fc>>(m, "fm_modulator_fc", D(fm_modulator_fc))
+        std::shared_ptr<audio_file_source>>(m, "audio_file_source", D(audio_file_source))
 
-        .def(py::init(&fm_modulator_fc::make),
-           py::arg("samp_rate"),
-           py::arg("deviation"),
-           py::arg("initial_phase"),
-           D(fm_modulator_fc,make)
+        .def(py::init(&audio_file_source::make),
+           py::arg("file_name"),
+           py::arg("samp_rate_out"),
+           py::arg("channels") = 1,
+           py::arg("loop") = true,
+           D(audio_file_source,make)
         )
         
-        .def("set_freq_deviation", &fm_modulator_fc::set_freq_deviation, py::arg("deviation"))
-        .def("freq_deviation", &fm_modulator_fc::freq_deviation)
+
+
+
         ;
 
 
