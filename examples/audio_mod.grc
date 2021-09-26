@@ -58,9 +58,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1208, -4.0]
+    coordinate: [1640, 508.0]
     rotation: 0
-    state: true
+    state: disabled
 - name: rf_gain
   id: variable
   parameters:
