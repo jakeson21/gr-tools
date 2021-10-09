@@ -17,7 +17,14 @@ namespace gr {
     /*!
      * \brief <+description of block+>
      * \ingroup tools
+     * 
+     * \details
+     * float outputs (1 per channel)
      *
+     * Reads in the specified MP3 audio file and ocnverts to multichannel output.
+     * Output Sample Rate field must match that of the file, or an error is displayed with the correct rate.
+     *
+     * MP3 decoder source: https://github.com/mackron/dr_libs
      */
     class TOOLS_API audio_file_source : virtual public gr::sync_block
     {

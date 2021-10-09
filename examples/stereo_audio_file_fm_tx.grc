@@ -57,7 +57,7 @@ blocks:
   id: variable_qtgui_range
   parameters:
     comment: ''
-    gui_hint: ''
+    gui_hint: 4,0,1,1
     label: fm_deviation
     min_len: '200'
     orient: QtCore.Qt.Horizontal
@@ -78,13 +78,13 @@ blocks:
   id: variable_qtgui_range
   parameters:
     comment: ''
-    gui_hint: ''
-    label: Mono
+    gui_hint: 1,0,1,1
+    label: L+R
     min_len: '200'
     orient: QtCore.Qt.Horizontal
     rangeType: float
     start: '0'
-    step: '0.1'
+    step: '0.01'
     stop: '2'
     value: '0.9'
     widget: counter_slider
@@ -99,7 +99,7 @@ blocks:
   id: variable_qtgui_range
   parameters:
     comment: ''
-    gui_hint: ''
+    gui_hint: 3,0,1,1
     label: Out
     min_len: '200'
     orient: QtCore.Qt.Horizontal
@@ -120,7 +120,7 @@ blocks:
   id: variable_qtgui_range
   parameters:
     comment: ''
-    gui_hint: ''
+    gui_hint: 0,0,1,1
     label: Pilot
     min_len: '200'
     orient: QtCore.Qt.Horizontal
@@ -153,13 +153,13 @@ blocks:
   id: variable_qtgui_range
   parameters:
     comment: ''
-    gui_hint: ''
-    label: Stereo
+    gui_hint: 2,0,1,1
+    label: L-R
     min_len: '200'
     orient: QtCore.Qt.Horizontal
     rangeType: float
     start: '0'
-    step: '0.1'
+    step: '0.01'
     stop: '2'
     value: '0.9'
     widget: counter_slider
@@ -770,7 +770,7 @@ blocks:
     alias: ''
     channels: '2'
     comment: ''
-    file_name: '''/home/fuguru/Music/Fleetwood Mac - Go Your Own Way - 1977.mp3'''
+    file_name: '''/home/fuguru/Music/Queensryche - 11 - Anybody Listening-.mp3'''
     maxoutbuf: '0'
     minoutbuf: '0'
     normalize: 'True'

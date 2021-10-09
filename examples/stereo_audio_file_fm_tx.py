@@ -97,21 +97,41 @@ class stereo_audio_file_fm_tx(gr.top_block, Qt.QWidget):
         self._variable_gain_range = Range(0, 70, 1, 45, 200)
         self._variable_gain_win = RangeWidget(self._variable_gain_range, self.set_variable_gain, 'RF Gain', "counter_slider", float, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._variable_gain_win)
-        self._stereo_gain_range = Range(0, 2, 0.1, 0.9, 200)
-        self._stereo_gain_win = RangeWidget(self._stereo_gain_range, self.set_stereo_gain, 'Stereo', "counter_slider", float, QtCore.Qt.Horizontal)
-        self.top_layout.addWidget(self._stereo_gain_win)
+        self._stereo_gain_range = Range(0, 2, 0.01, 0.9, 200)
+        self._stereo_gain_win = RangeWidget(self._stereo_gain_range, self.set_stereo_gain, 'L-R', "counter_slider", float, QtCore.Qt.Horizontal)
+        self.top_grid_layout.addWidget(self._stereo_gain_win, 2, 0, 1, 1)
+        for r in range(2, 3):
+            self.top_grid_layout.setRowStretch(r, 1)
+        for c in range(0, 1):
+            self.top_grid_layout.setColumnStretch(c, 1)
         self._pilot_gain_range = Range(0, 1, 0.01, 0.1, 200)
         self._pilot_gain_win = RangeWidget(self._pilot_gain_range, self.set_pilot_gain, 'Pilot', "counter_slider", float, QtCore.Qt.Horizontal)
-        self.top_layout.addWidget(self._pilot_gain_win)
+        self.top_grid_layout.addWidget(self._pilot_gain_win, 0, 0, 1, 1)
+        for r in range(0, 1):
+            self.top_grid_layout.setRowStretch(r, 1)
+        for c in range(0, 1):
+            self.top_grid_layout.setColumnStretch(c, 1)
         self._out_gain_range = Range(0, 2, 0.01, 0.95, 200)
         self._out_gain_win = RangeWidget(self._out_gain_range, self.set_out_gain, 'Out', "counter_slider", float, QtCore.Qt.Horizontal)
-        self.top_layout.addWidget(self._out_gain_win)
-        self._mono_gain_range = Range(0, 2, 0.1, 0.9, 200)
-        self._mono_gain_win = RangeWidget(self._mono_gain_range, self.set_mono_gain, 'Mono', "counter_slider", float, QtCore.Qt.Horizontal)
-        self.top_layout.addWidget(self._mono_gain_win)
+        self.top_grid_layout.addWidget(self._out_gain_win, 3, 0, 1, 1)
+        for r in range(3, 4):
+            self.top_grid_layout.setRowStretch(r, 1)
+        for c in range(0, 1):
+            self.top_grid_layout.setColumnStretch(c, 1)
+        self._mono_gain_range = Range(0, 2, 0.01, 0.9, 200)
+        self._mono_gain_win = RangeWidget(self._mono_gain_range, self.set_mono_gain, 'L+R', "counter_slider", float, QtCore.Qt.Horizontal)
+        self.top_grid_layout.addWidget(self._mono_gain_win, 1, 0, 1, 1)
+        for r in range(1, 2):
+            self.top_grid_layout.setRowStretch(r, 1)
+        for c in range(0, 1):
+            self.top_grid_layout.setColumnStretch(c, 1)
         self._fm_deviation_range = Range(2500, 100000, 500, 50000, 200)
         self._fm_deviation_win = RangeWidget(self._fm_deviation_range, self.set_fm_deviation, 'fm_deviation', "counter_slider", float, QtCore.Qt.Horizontal)
-        self.top_layout.addWidget(self._fm_deviation_win)
+        self.top_grid_layout.addWidget(self._fm_deviation_win, 4, 0, 1, 1)
+        for r in range(4, 5):
+            self.top_grid_layout.setRowStretch(r, 1)
+        for c in range(0, 1):
+            self.top_grid_layout.setColumnStretch(c, 1)
         self._center_freq_range = Range(80e6, 200e6, 100000, 108.5e6, 200)
         self._center_freq_win = RangeWidget(self._center_freq_range, self.set_center_freq, 'Center Frequency', "counter_slider", float, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._center_freq_win)
@@ -131,7 +151,7 @@ class stereo_audio_file_fm_tx(gr.top_block, Qt.QWidget):
         self.uhd_usrp_sink_0.set_antenna("TX/RX", 0)
         self.uhd_usrp_sink_0.set_bandwidth(500000, 0)
         self.uhd_usrp_sink_0.set_gain(variable_gain, 0)
-        self.tools_audio_file_source_0 = tools.audio_file_source('/home/fuguru/Music/Fleetwood Mac - Go Your Own Way - 1977.mp3', samp_rate, 2, True, True)
+        self.tools_audio_file_source_0 = tools.audio_file_source('/home/fuguru/Music/Queensryche - 11 - Anybody Listening-.mp3', samp_rate, 2, True, True)
         self.rational_resampler_xxx_0_1_0_0_0 = filter.rational_resampler_fff(
                 interpolation=2,
                 decimation=1,
