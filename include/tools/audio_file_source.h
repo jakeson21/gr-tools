@@ -32,7 +32,7 @@ namespace gr {
        * class. tools::audio_file_source::make is the public interface for
        * creating new instances.
        */
-      static sptr make(std::string file_name, float samp_rate_out, int channels=1, bool loop=true);
+      static sptr make(std::string file_name, float samp_rate_out, int channels=1, bool loop=true, bool normalize=false);
     };
 
   } // namespace tools

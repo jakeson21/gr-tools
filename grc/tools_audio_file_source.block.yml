@@ -5,7 +5,7 @@ flags: [ python, cpp ]
 
 templates:
   imports: import tools
-  make: tools.audio_file_source(${file_name}, ${samp_rate_out}, ${channels}, ${repeat})
+  make: tools.audio_file_source(${file_name}, ${samp_rate_out}, ${channels}, ${repeat}, ${normalize})
 
 #  Make one 'parameters' list entry for every parameter you want settable from the GUI.
 #     Keys include:
@@ -27,8 +27,16 @@ parameters:
   hide: part
 - id: repeat
   label: Repeat
-  dtype: bool
-  default: True
+  dtype: enum
+  default: 'True'
+  options: ['False', 'True']
+  option_labels: ['False', 'True']
+- id: normalize
+  label: Normalize
+  dtype: enum
+  default: 'True'
+  options: ['False', 'True']
+  option_labels: ['False', 'True']
 
 #  Make one 'inputs' list entry per input and one 'outputs' list entry per output.
 #  Keys include:

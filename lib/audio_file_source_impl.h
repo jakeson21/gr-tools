@@ -33,7 +33,7 @@ namespace gr {
         int64_t frameNum = 0;
       
     public:
-        audio_file_source_impl(std::string file_name, float samp_rate_out, int channels, bool loop);
+        audio_file_source_impl(std::string file_name, float samp_rate_out, int channels, bool loop, bool normalize);
         ~audio_file_source_impl();
 
         // Where all the action really happens

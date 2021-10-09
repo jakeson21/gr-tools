@@ -195,8 +195,8 @@ class mod_test(gr.top_block, Qt.QWidget):
         self.connect((self.blocks_multiply_const_vxx_0, 0), (self.rational_resampler_xxx_0, 0))
         self.connect((self.rational_resampler_xxx_0, 0), (self.tools_fm_modulator_fc_0, 0))
         self.connect((self.rational_resampler_xxx_0_0, 0), (self.uhd_usrp_sink_0, 0))
-        self.connect((self.tools_audio_file_source_0, 1), (self.blocks_add_xx_0, 1))
         self.connect((self.tools_audio_file_source_0, 0), (self.blocks_add_xx_0, 0))
+        self.connect((self.tools_audio_file_source_0, 1), (self.blocks_add_xx_0, 1))
         self.connect((self.tools_fm_modulator_fc_0, 0), (self.qtgui_time_sink_x_0, 0))
         self.connect((self.tools_fm_modulator_fc_0, 0), (self.rational_resampler_xxx_0_0, 0))
 

@@ -15,16 +15,36 @@ namespace gr {
 
     using output_type = float;
     audio_file_source::sptr
-    audio_file_source::make(std::string file_name, float samp_rate_out, int channels, bool loop)
+    audio_file_source::make(std::string file_name, float samp_rate_out, int channels, bool loop, bool normalize)
     {
-        return gnuradio::make_block_sptr<audio_file_source_impl>(file_name, samp_rate_out, channels, loop);
+        return gnuradio::make_block_sptr<audio_file_source_impl>(file_name, samp_rate_out, channels, loop, normalize);
     }
 
+    static bool abs_compare(float a, float b)
+    {
+        return (std::abs(a) < std::abs(b));
+    }
+
+    template<class Compare>
+    float max_abs_element(const float* first, size_t length, Compare comp)
+    {
+        if (length == 1) return *first;
+    
+        float largest = *first;
+        const float* last = first + length;
+        ++first;
+        for (; first != last; ++first) {
+            if (comp(largest, *first)) {
+                largest = *first;
+            }
+        }
+        return largest;
+    }
 
     /*
      * The private constructor
      */
-    audio_file_source_impl::audio_file_source_impl(std::string file_name, float samp_rate_out, int channels, bool loop)
+    audio_file_source_impl::audio_file_source_impl(std::string file_name, float samp_rate_out, int channels, bool loop, bool normalize=true)
       : gr::sync_block("audio_file_source",
         gr::io_signature::make(0, 0, 0),
         gr::io_signature::make(1 /* min outputs */, channels /*max outputs */, sizeof(output_type)))
@@ -37,6 +57,15 @@ namespace gr {
         this->mp3_audio = drmp3_open_file_and_read_pcm_frames_f32(this->file_name.c_str(), &this->mp3_config, &this->totalFrameCount, NULL);
         this->channels = mp3_config.channels;
         drmp3_uint32 sampleRate = mp3_config.sampleRate;
+
+        if (normalize)
+        {
+            float max_abs = max_abs_element(this->mp3_audio, this->totalFrameCount*this->channels, abs_compare);
+            for (size_t n=0; n<this->totalFrameCount*this->channels; ++n)
+            {
+                *this->mp3_audio /= max_abs;
+            }
+        }
 
         if (this->num_outputs > this->channels)
         {
