@@ -244,13 +244,14 @@ blocks:
     file_name: '''/home/fuguru/Music/311-beautiful_disaster.mp3'''
     maxoutbuf: '0'
     minoutbuf: '0'
+    normalize: 'True'
     repeat: 'True'
     samp_rate_out: '41000'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [32, 220.0]
+    coordinate: [32, 212.0]
     rotation: 0
     state: true
 - name: uhd_usrp_sink_0

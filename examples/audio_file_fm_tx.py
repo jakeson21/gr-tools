@@ -21,20 +21,20 @@ if __name__ == '__main__':
         except:
             print("Warning: failed to XInitThreads()")
 
-from gnuradio import analog
-from gnuradio import blocks
-from gnuradio import filter
+from PyQt5 import Qt
+from gnuradio import qtgui
 from gnuradio.filter import firdes
+import sip
+from gnuradio import blocks
+import numpy
 from gnuradio import gr
 from gnuradio.fft import window
 import sys
 import signal
-from PyQt5 import Qt
 from argparse import ArgumentParser
 from gnuradio.eng_arg import eng_float, intx
 from gnuradio import eng_notation
-from gnuradio import uhd
-import time
+from gnuradio import gr, digital, analog
 from gnuradio.qtgui import Range, RangeWidget
 from PyQt5 import QtCore
 import numpy as np
@@ -81,8 +81,8 @@ class audio_file_fm_tx(gr.top_block, Qt.QWidget):
         # Variables
         ##################################################
         self.variable_gain = variable_gain = 25
-        self.variable_center_freq = variable_center_freq = 900.5e6
-        self.samp_rate = samp_rate = 32000
+        self.variable_center_freq = variable_center_freq = 931.0e6
+        self.samp_rate = samp_rate = 48000
 
         ##################################################
         # Blocks
@@ -90,57 +90,133 @@ class audio_file_fm_tx(gr.top_block, Qt.QWidget):
         self._variable_gain_range = Range(0, 70, 1, 25, 200)
         self._variable_gain_win = RangeWidget(self._variable_gain_range, self.set_variable_gain, 'RF Gain', "counter_slider", float, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._variable_gain_win)
-        self._variable_center_freq_range = Range(150e6, 1e9, 10000, 900.5e6, 200)
+        self._variable_center_freq_range = Range(150e6, 1e9, 10000, 931.0e6, 200)
         self._variable_center_freq_win = RangeWidget(self._variable_center_freq_range, self.set_variable_center_freq, 'Center Frequency', "counter_slider", float, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._variable_center_freq_win)
-        self.uhd_usrp_sink_0 = uhd.usrp_sink(
-            ",".join(("serial=3102419", '')),
-            uhd.stream_args(
-                cpu_format="fc32",
-                args='',
-                channels=list(range(0,1)),
-            ),
-            "",
+        self.tools_upsample_xx_1 = tools.upsample_ss(10)
+        self.qtgui_time_sink_x_0_0 = qtgui.time_sink_f(
+            1024, #size
+            samp_rate, #samp_rate
+            "", #name
+            1, #number of inputs
+            None # parent
         )
-        self.uhd_usrp_sink_0.set_samp_rate(96000*2)
-        self.uhd_usrp_sink_0.set_time_unknown_pps(uhd.time_spec(0))
+        self.qtgui_time_sink_x_0_0.set_update_time(0.10)
+        self.qtgui_time_sink_x_0_0.set_y_axis(-1, 1)
 
-        self.uhd_usrp_sink_0.set_center_freq(variable_center_freq, 0)
-        self.uhd_usrp_sink_0.set_antenna("TX/RX", 0)
-        self.uhd_usrp_sink_0.set_gain(variable_gain, 0)
-        self.tools_audio_file_source_0 = tools.audio_file_source('/home/fuguru/Music/311-beautiful_disaster.mp3', 41000, 2, True)
-        self.rational_resampler_xxx_0_0 = filter.rational_resampler_ccc(
-                interpolation=2,
-                decimation=1,
-                taps=[],
-                fractional_bw=0.4)
-        self.rational_resampler_xxx_0 = filter.rational_resampler_ccc(
-                interpolation=160,
-                decimation=147,
-                taps=[],
-                fractional_bw=0.4)
-        self.blocks_multiply_const_vxx_0 = blocks.multiply_const_ff(0.5)
-        self.blocks_add_xx_0 = blocks.add_vff(1)
-        self.analog_wfm_tx_0 = analog.wfm_tx(
-        	audio_rate=44100,
-        	quad_rate=2*44100,
-        	tau=75e-6,
-        	max_dev=75e3,
-        	fh=-1.0,
+        self.qtgui_time_sink_x_0_0.set_y_label('Amplitude', "")
+
+        self.qtgui_time_sink_x_0_0.enable_tags(True)
+        self.qtgui_time_sink_x_0_0.set_trigger_mode(qtgui.TRIG_MODE_FREE, qtgui.TRIG_SLOPE_POS, 0.0, 0, 0, "")
+        self.qtgui_time_sink_x_0_0.enable_autoscale(True)
+        self.qtgui_time_sink_x_0_0.enable_grid(True)
+        self.qtgui_time_sink_x_0_0.enable_axis_labels(True)
+        self.qtgui_time_sink_x_0_0.enable_control_panel(False)
+        self.qtgui_time_sink_x_0_0.enable_stem_plot(False)
+
+
+        labels = ['Signal 1', 'Signal 2', 'Signal 3', 'Signal 4', 'Signal 5',
+            'Signal 6', 'Signal 7', 'Signal 8', 'Signal 9', 'Signal 10']
+        widths = [1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1]
+        colors = ['blue', 'red', 'green', 'black', 'cyan',
+            'magenta', 'yellow', 'dark red', 'dark green', 'dark blue']
+        alphas = [1.0, 1.0, 1.0, 1.0, 1.0,
+            1.0, 1.0, 1.0, 1.0, 1.0]
+        styles = [1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1]
+        markers = [-1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1]
+
+
+        for i in range(1):
+            if len(labels[i]) == 0:
+                self.qtgui_time_sink_x_0_0.set_line_label(i, "Data {0}".format(i))
+            else:
+                self.qtgui_time_sink_x_0_0.set_line_label(i, labels[i])
+            self.qtgui_time_sink_x_0_0.set_line_width(i, widths[i])
+            self.qtgui_time_sink_x_0_0.set_line_color(i, colors[i])
+            self.qtgui_time_sink_x_0_0.set_line_style(i, styles[i])
+            self.qtgui_time_sink_x_0_0.set_line_marker(i, markers[i])
+            self.qtgui_time_sink_x_0_0.set_line_alpha(i, alphas[i])
+
+        self._qtgui_time_sink_x_0_0_win = sip.wrapinstance(self.qtgui_time_sink_x_0_0.pyqwidget(), Qt.QWidget)
+        self.top_layout.addWidget(self._qtgui_time_sink_x_0_0_win)
+        self.qtgui_time_sink_x_0 = qtgui.time_sink_c(
+            1024, #size
+            samp_rate, #samp_rate
+            "", #name
+            1, #number of inputs
+            None # parent
         )
+        self.qtgui_time_sink_x_0.set_update_time(0.10)
+        self.qtgui_time_sink_x_0.set_y_axis(-1, 1)
+
+        self.qtgui_time_sink_x_0.set_y_label('Amplitude', "")
+
+        self.qtgui_time_sink_x_0.enable_tags(True)
+        self.qtgui_time_sink_x_0.set_trigger_mode(qtgui.TRIG_MODE_FREE, qtgui.TRIG_SLOPE_POS, 0.0, 0, 0, "")
+        self.qtgui_time_sink_x_0.enable_autoscale(True)
+        self.qtgui_time_sink_x_0.enable_grid(True)
+        self.qtgui_time_sink_x_0.enable_axis_labels(True)
+        self.qtgui_time_sink_x_0.enable_control_panel(False)
+        self.qtgui_time_sink_x_0.enable_stem_plot(False)
+
+
+        labels = ['Signal 1', 'Signal 2', 'Signal 3', 'Signal 4', 'Signal 5',
+            'Signal 6', 'Signal 7', 'Signal 8', 'Signal 9', 'Signal 10']
+        widths = [1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1]
+        colors = ['blue', 'red', 'green', 'black', 'cyan',
+            'magenta', 'yellow', 'dark red', 'dark green', 'dark blue']
+        alphas = [1.0, 1.0, 1.0, 1.0, 1.0,
+            1.0, 1.0, 1.0, 1.0, 1.0]
+        styles = [1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1]
+        markers = [-1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1]
+
+
+        for i in range(2):
+            if len(labels[i]) == 0:
+                if (i % 2 == 0):
+                    self.qtgui_time_sink_x_0.set_line_label(i, "Re{{Data {0}}}".format(i/2))
+                else:
+                    self.qtgui_time_sink_x_0.set_line_label(i, "Im{{Data {0}}}".format(i/2))
+            else:
+                self.qtgui_time_sink_x_0.set_line_label(i, labels[i])
+            self.qtgui_time_sink_x_0.set_line_width(i, widths[i])
+            self.qtgui_time_sink_x_0.set_line_color(i, colors[i])
+            self.qtgui_time_sink_x_0.set_line_style(i, styles[i])
+            self.qtgui_time_sink_x_0.set_line_marker(i, markers[i])
+            self.qtgui_time_sink_x_0.set_line_alpha(i, alphas[i])
+
+        self._qtgui_time_sink_x_0_win = sip.wrapinstance(self.qtgui_time_sink_x_0.pyqwidget(), Qt.QWidget)
+        self.top_layout.addWidget(self._qtgui_time_sink_x_0_win)
+        self.digital_cpmmod_bc_0 = digital.cpmmod_bc(analog.cpm.GAUSSIAN, 0.2, 10, 1, 0.3)
+        self.blocks_throttle_0 = blocks.throttle(gr.sizeof_gr_complex*1, samp_rate,True)
+        self.blocks_short_to_float_0 = blocks.short_to_float(1, 1)
+        self.blocks_short_to_char_0 = blocks.short_to_char(1)
+        self.blocks_null_sink_0 = blocks.null_sink(gr.sizeof_gr_complex*1)
+        self.blocks_multiply_const_vxx_0 = blocks.multiply_const_ss(2)
+        self.blocks_add_const_vxx_0 = blocks.add_const_ss(-1)
+        self.analog_random_source_x_0 = blocks.vector_source_s(list(map(int, numpy.random.randint(0, 2, 480))), True)
 
 
 
         ##################################################
         # Connections
         ##################################################
-        self.connect((self.analog_wfm_tx_0, 0), (self.rational_resampler_xxx_0, 0))
-        self.connect((self.blocks_add_xx_0, 0), (self.blocks_multiply_const_vxx_0, 0))
-        self.connect((self.blocks_multiply_const_vxx_0, 0), (self.analog_wfm_tx_0, 0))
-        self.connect((self.rational_resampler_xxx_0, 0), (self.rational_resampler_xxx_0_0, 0))
-        self.connect((self.rational_resampler_xxx_0_0, 0), (self.uhd_usrp_sink_0, 0))
-        self.connect((self.tools_audio_file_source_0, 1), (self.blocks_add_xx_0, 1))
-        self.connect((self.tools_audio_file_source_0, 0), (self.blocks_add_xx_0, 0))
+        self.connect((self.analog_random_source_x_0, 0), (self.blocks_multiply_const_vxx_0, 0))
+        self.connect((self.blocks_add_const_vxx_0, 0), (self.blocks_short_to_char_0, 0))
+        self.connect((self.blocks_add_const_vxx_0, 0), (self.tools_upsample_xx_1, 0))
+        self.connect((self.blocks_multiply_const_vxx_0, 0), (self.blocks_add_const_vxx_0, 0))
+        self.connect((self.blocks_short_to_char_0, 0), (self.digital_cpmmod_bc_0, 0))
+        self.connect((self.blocks_short_to_float_0, 0), (self.qtgui_time_sink_x_0_0, 0))
+        self.connect((self.blocks_throttle_0, 0), (self.blocks_null_sink_0, 0))
+        self.connect((self.digital_cpmmod_bc_0, 0), (self.blocks_throttle_0, 0))
+        self.connect((self.digital_cpmmod_bc_0, 0), (self.qtgui_time_sink_x_0, 0))
+        self.connect((self.tools_upsample_xx_1, 0), (self.blocks_short_to_float_0, 0))
 
 
     def closeEvent(self, event):
@@ -156,20 +232,21 @@ class audio_file_fm_tx(gr.top_block, Qt.QWidget):
 
     def set_variable_gain(self, variable_gain):
         self.variable_gain = variable_gain
-        self.uhd_usrp_sink_0.set_gain(self.variable_gain, 0)
 
     def get_variable_center_freq(self):
         return self.variable_center_freq
 
     def set_variable_center_freq(self, variable_center_freq):
         self.variable_center_freq = variable_center_freq
-        self.uhd_usrp_sink_0.set_center_freq(self.variable_center_freq, 0)
 
     def get_samp_rate(self):
         return self.samp_rate
 
     def set_samp_rate(self, samp_rate):
         self.samp_rate = samp_rate
+        self.blocks_throttle_0.set_sample_rate(self.samp_rate)
+        self.qtgui_time_sink_x_0.set_samp_rate(self.samp_rate)
+        self.qtgui_time_sink_x_0_0.set_samp_rate(self.samp_rate)
 
 
 

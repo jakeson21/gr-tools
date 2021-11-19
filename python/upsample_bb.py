@@ -10,16 +10,17 @@
 import numpy as np
 from gnuradio import gr
 
-class upsample_bb(gr.sync_block):
+class upsample_bb(gr.interp_block):
     """
     docstring for block upsample_bb
     """
     def __init__(self, N=1):
-        gr.sync_block.__init__(self,
+        gr.interp_block.__init__(self,
             name="upsample_bb",
             in_sig=[np.byte],
-            out_sig=[np.byte])
-        self.set_output_multiple(N)
+            out_sig=[np.byte], interp=N)
+        self.set_relative_rate(N)
+        # self.set_output_multiple(N)
         self._N = N
 
     def work(self, input_items, output_items):
